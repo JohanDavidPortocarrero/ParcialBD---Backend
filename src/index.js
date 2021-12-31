@@ -9,6 +9,10 @@ app.use(express.urlencoded({extended: false}));
 // Router
 app.use(require('./routers/index'));
 
-app.listen(4000);
-console.log('Servidor en puerto 4000')
+app.set('port', process.env.PORT || 4000);
+
+app.listen(app.get('port'), () => {
+    console.log('Servidor en puerto ' + app.get('port'));
+});
+
 

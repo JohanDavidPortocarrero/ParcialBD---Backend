@@ -123,4 +123,4 @@ router.post('/asistencia', createAsistencia);
 router.put('/asistencia/:id', updateAsistencia);
 router.delete('/asistencia/:id', deleteAsistencia);
 
-module.exports = router;
+module.exports = router; 

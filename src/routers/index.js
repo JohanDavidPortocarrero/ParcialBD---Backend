@@ -9,7 +9,6 @@ const { getRol,
         updateSede, 
         getUsuarios, 
         getUsuariosById,
-        crearteUsuarios,
         getRolById,
         createRol,
         updateRol,
@@ -20,12 +19,9 @@ const { getRol,
         updateAdmin,
         deleteAdmin,
         updateUsuarios,
-        deleteUsuarios,
         getPersonal,
         getPersonalById,
-        createPersonal,
         updatePersonal,
-        deletePersonal,
         getProfesores,
         getProfesorById,
         createProfesor,
@@ -69,16 +65,12 @@ router.delete('/sedes/:id', deleteSedes);
 /* Usuarios */
 router.get('/usuarios', getUsuarios);
 router.get('/usuarios/:id', getUsuariosById);
-router.post('/usuarios', crearteUsuarios);
 router.put('/usuarios/:id', updateUsuarios);
-router.delete('/usuarios/:id', deleteUsuarios);
 
 /* Personal */
 router.get('/personal', getPersonal);
 router.get('/personal/:id', getPersonalById);
-router.post('/personal', createPersonal);
 router.put('/personal/:id', updatePersonal);
-router.delete('/personal/:id', deletePersonal);
 
 
 /* Administradores */

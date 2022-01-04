@@ -166,6 +166,7 @@ const deleteSedes = async (req, res) => {
     }
 }
 
+
 /* CRUD USUARIOS */
 const getUsuarios = async (req, res) => {
     try{
@@ -184,34 +185,6 @@ const getUsuariosById = async (req, res) => {
         res.json(response.rows)
     }catch(e){
         console.log(e);
-    }
-}
-
-const crearteUsuarios = async (req, res) => {
-    try{
-
-        const {identificacion, nombres, apellidos, direccion, rol, pass} = req.body;
-
-        const coman = 'INSERT INTO usuarios (identificacion, nombres, apellidos, direccion, rol, pass) VALUES ($1, $2, $3, $4, $5, $6)';
-        const values = [identificacion, nombres, apellidos, direccion, rol, pass];
-        const response = await pool.query(coman, values);
-
-        res.json({
-            message : 'Se creado el usuario con exito',
-            body : {
-                dato : {
-                    identificacion, 
-                    nombres, 
-                    apellidos, 
-                    direccion, 
-                    rol, 
-                    pass
-                }
-            }
-        })
-
-    }catch(e){
-        console.log(e)
     }
 }
 
@@ -240,17 +213,6 @@ const updateUsuarios = async (req, res) => {
     }
 }
 
-const deleteUsuarios = async (req, res) => {
-    try{
-        const coman = 'DELETE FROM usuarios WHERE identificacion = $1';
-        const value = [req.params.id]
-        const response = pool.query(coman, value);
-        res.json('El usuario con numero ' + req.params.id + ' asido eliminada')
-    }catch(e){
-        console.log(e)
-    }
-}
-
 /* CRUD PERSONAL */
 const getPersonal = async (req, res) => {
     try{
@@ -267,30 +229,6 @@ const getPersonalById = async (req, res) => {
         const values = [req.params.id]
         const response = await pool.query(coman, values);
         res.json(response.rows)
-    }catch(e){
-        console.log(e)
-    }
-}
-
-const createPersonal = async (req, res) => {
-    try{
-        const {identificacion, salario, eps, arl} = req.body;
-
-        const coman = 'INSERT INTO personal (identificacion, salario, eps, arl) VALUES ($1, $2, $3, $4)';
-        const values = [identificacion, salario, eps, arl];
-        const response = await pool.query(coman, values);
-
-        res.json({
-            message : 'Se creado el personal con exito',
-            body : {
-                dato : {
-                    identificacion, 
-                    salario, 
-                    eps, 
-                    arl
-                }
-            }
-        })
     }catch(e){
         console.log(e)
     }
@@ -319,17 +257,6 @@ const updatePersonal = async (req, res) => {
     }
 }
 
-const deletePersonal = async (req, res) => {
-    try{
-        const coman = 'DELETE FROM  WHERE identificacion = $1';
-        const value = [req.params.id]
-        const response = pool.query(coman, value);
-        res.json('Eliminado con exito')
-    }catch(e){
-        console.log(e)
-    }
-}
-
 /* CRUD ADMINISTRADORES */
 const getAdmins = async (req, res) => {
     try{
@@ -353,18 +280,34 @@ const getAdminById = async (req, res) => {
 
 const createAdmin = async (req, res) => {
     try{
-        const {identificacion, nombre_usuario} = req.body;
+        const {identificacion, nombres, apellidos, direccion, rol, pass, nombre_usuario, salario, eps, arl} = req.body;
 
-        const coman = 'INSERT INTO administradores (identificacion, nombre_usuario) VALUES ($1, $2)';
-        const values = [identificacion, nombre_usuario];
-        const response = await pool.query(coman, values);
+        const comanAdmin = 'INSERT INTO administradores (identificacion, nombre_usuario) VALUES ($1, $2)';
+        const valuesAdmin = [identificacion, nombre_usuario];
+        const responseAdmin = await pool.query(comanAdmin, valuesAdmin);
+
+        const comanPers = 'INSERT INTO personal (identificacion, salario, eps, arl) VALUES ($1, $2, $3, $4)';
+        const valuesPers = [identificacion, salario, eps, arl];
+        const responsePers = await pool.query(comanPers, valuesPers);
+
+        const comanUser = 'INSERT INTO usuarios (identificacion, nombres, apellidos, direccion, rol, pass) VALUES ($1, $2, $3, $4, $5, $6)';
+        const valuesUser = [identificacion, nombres, apellidos, direccion, rol, pass];
+        const responseUser = await pool.query(comanUser, valuesUser);
 
         res.json({
             message : 'Se creado el administrador con exito',
             body : {
                 dato : {
                     identificacion, 
-                    nombre_usuario
+                    nombre_usuario,
+                    nombres,
+                    apellidos,
+                    direccion,
+                    rol,
+                    pass,
+                    salario, 
+                    eps, 
+                    arl
                 }
             }
         })
@@ -396,9 +339,13 @@ const updateAdmin = async (req, res) => {
 
 const deleteAdmin = async (req, res) => {
     try{
-        const coman = 'DELETE FROM administradores WHERE identificacion = $1';
+        const comanAdmin = 'DELETE FROM administradores WHERE identificacion = $1';
+        const comanPers = 'DELETE FROM personal WHERE identificacion = $1';
+        const comanUser = 'DELETE FROM usuarios WHERE identificacion = $1';
         const value = [req.params.id]
-        const response = pool.query(coman, value);
+        const responseAdmins = pool.query(comanAdmin, value);
+        const responsePers = pool.query(comanPers, value);
+        const responseUser = pool.query(comanUser, value);
         res.json('El administrado identificado con ' + req.params.id + ' asido eliminada')
     }catch(e){
         console.log(e)
@@ -428,24 +375,41 @@ const getProfesorById = async (req, res) => {
 
 const createProfesor = async (req, res) => {
     try{
-        const {identificacion, id_sede} = req.body;
+        const {identificacion, nombres, apellidos, direccion, rol, pass, id_sede, salario, eps, arl} = req.body;
 
-        const coman = 'INSERT INTO profesores (identificacion, id_sede) VALUES ($1, $2)';
-        const values = [identificacion, id_sede];
-        const response = await pool.query(coman, values);
+        const comanDocen = 'INSERT INTO profesores (identificacion, id_sede) VALUES ($1, $2)';
+        const valuesDoncen = [identificacion, id_sede];
+        const responseDocen = await pool.query(comanDocen, valuesDoncen);
+
+        const comanPers = 'INSERT INTO personal (identificacion, salario, eps, arl) VALUES ($1, $2, $3, $4)';
+        const valuesPers = [identificacion, salario, eps, arl];
+        const responsePers = await pool.query(comanPers, valuesPers);
+
+        const comanUser = 'INSERT INTO usuarios (identificacion, nombres, apellidos, direccion, rol, pass) VALUES ($1, $2, $3, $4, $5, $6)';
+        const valuesUser = [identificacion, nombres, apellidos, direccion, rol, pass];
+        const responseUser = await pool.query(comanUser, valuesUser);
 
         res.json({
             message : 'Se creado el profesor con exito',
             body : {
                 dato : {
                     identificacion, 
-                    id_sede
+                    id_sede,
+                    nombres,
+                    apellidos,
+                    direccion,
+                    rol,
+                    pass,
+                    salario, 
+                    eps, 
+                    arl
                 }
             }
         })
     }catch(e){
         console.log(e)
     }
+    
 }
 
 const updateProfesor = async (req, res) => {
@@ -471,10 +435,14 @@ const updateProfesor = async (req, res) => {
 
 const deleteProfesor = async (req, res) => {
     try{
-        const coman = 'DELETE FROM profesores WHERE identificacion = $1';
+        const comanDocen = 'DELETE FROM profesores WHERE identificacion = $1';
+        const comanPers = 'DELETE FROM personal WHERE identificacion = $1';
+        const comanUser = 'DELETE FROM usuarios WHERE identificacion = $1';
         const value = [req.params.id]
-        const response = pool.query(coman, value);
-        res.json('El profesor identificado con ' + req.params.id + ' asido eliminada')
+        const responseDocen = pool.query(comanDocen, value);
+        const responsePers = pool.query(comanPers, value);
+        const responseUser = pool.query(comanUser, value);
+        res.json('El administrado identificado con ' + req.params.id + ' asido eliminada')
     }catch(e){
         console.log(e)
     }
@@ -503,17 +471,26 @@ const getEstudianteById = async (req, res) => {
 
 const createEstudiante = async (req, res) => {
     try{
-        const {identificacion, codigo_est} = req.body;
+        const {identificacion, nombres, apellidos, direccion, rol, pass, codigo_est} = req.body;
 
-        const coman = 'INSERT INTO estudiantes (identificacion, codigo_est) VALUES ($1, $2)';
-        const values = [identificacion, codigo_est];
-        const response = await pool.query(coman, values);
+        const comanEst = 'INSERT INTO estudiantes (identificacion, codigo_est) VALUES ($1, $2)';
+        const valuesEst = [identificacion, codigo_est];
+        const responseEst = await pool.query(comanEst, valuesEst);
+
+        const comanUser = 'INSERT INTO usuarios (identificacion, nombres, apellidos, direccion, rol, pass) VALUES ($1, $2, $3, $4, $5, $6)';
+        const valuesUser = [identificacion, nombres, apellidos, direccion, rol, pass];
+        const responseUser = await pool.query(comanUser, valuesUser);
 
         res.json({
-            message : 'Se creado el profesor con exito',
+            message : 'Se creado el estudiante con exito',
             body : {
                 dato : {
                     identificacion, 
+                    nombres, 
+                    apellidos, 
+                    direccion, 
+                    rol, 
+                    pass, 
                     codigo_est
                 }
             }
@@ -547,8 +524,10 @@ const updateEstudiante = async (req, res) => {
 const deleteEstudiante = async (req, res) => {
     try{
         const coman = 'DELETE FROM estudiantes WHERE identificacion = $1';
+        const comanUser = 'DELETE FROM usuarios WHERE identificacion = $1';
         const value = [req.params.id]
         const response = pool.query(coman, value);
+        const responseUser = pool.query(comanUser, value);
         res.json('El estudiante identificado con ' + req.params.id + ' asido eliminada')
     }catch(e){
         console.log(e)
@@ -801,14 +780,10 @@ module.exports = {
     deleteSedes,
     getUsuarios,
     getUsuariosById,
-    crearteUsuarios,
     updateUsuarios,
-    deleteUsuarios,
     getPersonal,
     getPersonalById,
-    createPersonal,
     updatePersonal,
-    deletePersonal,
     getAdmins,
     getAdminById,
     createAdmin,

@@ -1,6 +1,5 @@
 const {Pool} = require('pg');
 
-
 const config = {
     user: 'cxgxgmclongztt',
     host: 'ec2-34-236-87-247.compute-1.amazonaws.com',

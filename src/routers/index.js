@@ -83,7 +83,7 @@ router.delete('/admins/:id', deleteAdmin);
 /* Profesores */
 router.get('/profesores', getProfesores);
 router.get('/profesores/:id', getProfesorById);
-router.post('/profesores', createProfesor);
+router.post('/profesores', createProfesor); 
 router.put('/profesores/:id', updateProfesor);
 router.delete('/profesores/:id', deleteProfesor);
 
